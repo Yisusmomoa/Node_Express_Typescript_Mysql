@@ -18,7 +18,7 @@ export type createUser = Omit<user, 'id' | 'createdAt' | 'updatedAt' | 'deletedA
 
 export type loginUser = Pick<user, 'email' | 'pass'>
 
-export type showUser = Omit<user, 'pass' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+export type showUser = Omit<user, 'pass' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'salt'>
 
 // @Table
 // class User extends Model {

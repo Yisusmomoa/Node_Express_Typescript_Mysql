@@ -1,3 +1,4 @@
+import { generateToken } from '../config/token'
 import User, { createUser, loginUser, showUser } from '../models/user'
 
 export const signup = async (user: createUser): Promise<createUser> => {
@@ -5,7 +6,7 @@ export const signup = async (user: createUser): Promise<createUser> => {
   return result
 }
 
-export const signin = async (user: loginUser): Promise<showUser | null> => {
+export const signin = async (user: loginUser): Promise<string | null> => {
   const result = await User.findOne({
     where: {
       email: user.email
@@ -16,5 +17,12 @@ export const signin = async (user: loginUser): Promise<showUser | null> => {
   const isEqual = await result.validatePassword(user.pass)
   if (!isEqual) throw new Error('Error en la contraseña o usuario')
   if (result === null) throw new Error('Error, email o contraseña no encontrados')
-  return result
+  const payload: showUser = {
+    id: result?.id,
+    username: result?.username,
+    email: result?.email
+  }
+  const token = generateToken(payload)
+
+  return token
 }

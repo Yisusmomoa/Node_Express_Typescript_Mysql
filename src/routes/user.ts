@@ -30,8 +30,16 @@ router.post('/signin', async (req, res) => {
         (user.email === undefined || user.pass === undefined)) {
       throw new Error('Error, faltan campos')
     }
-    const result = await signin(user)
-    res.status(200).send(result)
+    const token = await signin(user)
+    res.header('Access-Control-Allow-Origin', req.headers.origin)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.cookie('token', token, {
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1800000,
+      httpOnly: true
+    })
+    res.status(200).send({ message: 'Usuario logeado', token })
   } catch (error) {
     res.status(400).send({ message: error.message })
   }
