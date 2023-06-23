@@ -15,6 +15,7 @@ export const generateToken = (payload: showUser): string => {
 
 // verificar el token
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const verifyToken = (token: string) => {
   return jwt.verify(token, SECRET)
 }

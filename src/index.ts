@@ -1,12 +1,13 @@
 import express from 'express'
 import sequelizeConnection from './db/sequelize'
 import routes from './routes'
-
+import cookieParser from 'cookie-parser'
 const app = express()
 const PORT = 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use('/api', routes)
 sequelizeConnection.sync({ force: false }).then(() => {
   console.log('conection')

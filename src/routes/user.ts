@@ -1,6 +1,7 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { signin, signup } from '../services/user'
 import { createUser, loginUser } from '../models/user'
+import authMe from '../middlewares/authMe'
 
 const router = express.Router()
 
@@ -23,7 +24,7 @@ router.post('/signup', async (req, res) => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.post('/signin', async (req, res) => {
+router.post('/signin', async (req: Request, res: Response) => {
   try {
     const user: loginUser = req.body
     if ((user.email === null || user.pass === null) ||
@@ -33,16 +34,16 @@ router.post('/signin', async (req, res) => {
     const token = await signin(user)
     res.header('Access-Control-Allow-Origin', req.headers.origin)
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-    res.cookie('token', token, {
-      secure: true,
-      sameSite: 'none',
-      maxAge: 1800000,
-      httpOnly: true
-    })
+    res.cookie('token', token)
     res.status(200).send({ message: 'Usuario logeado', token })
   } catch (error) {
     res.status(400).send({ message: error.message })
   }
+})
+
+router.get('/usuariologeado', authMe, (req, res) => {
+  const user = req.body.user
+  res.status(202).send(user)
 })
 
 export default router
