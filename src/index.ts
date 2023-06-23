@@ -22,7 +22,7 @@ sequelizeConnection.sync({ force: false }).then(() => {
 // TODO
 /*
 TODO
-logica de users: registro y login
+logica de users: registro y login ✔
 Logica de todos: create, get all by user, get by id, delete, update
 jwt
 */

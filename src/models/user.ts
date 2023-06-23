@@ -1,12 +1,14 @@
 // import { DataTypes, Model } from 'sequelize'
-import { Table, Model, DataType, Column, HasMany } from 'sequelize-typescript'
+import { Table, Model, DataType, Column, HasMany, BeforeCreate } from 'sequelize-typescript'
 import Todo from './todo'
+import bcrypt from 'bcrypt'
 
 export interface user {
   id: number
   username: string
   email: string
   pass: string
+  salt: string
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date
@@ -51,6 +53,11 @@ class User extends Model<user | createUser | loginUser | showUser> {
   })
     pass!: string
 
+  @Column({
+    type: DataType.STRING
+  })
+    salt!: string
+
   @Column
     createdAt!: Date
 
@@ -62,43 +69,29 @@ class User extends Model<user | createUser | loginUser | showUser> {
 
   @HasMany(() => Todo)
     todos!: Todo[]
-}
 
-// class User extends Model<user> implements user {
-//   public id!: number
-//   public username!: string
-//   public email!: string
-//   public pass!: string
-//   public createdAt?: Date
-//   public updatedAt?: Date
-//   public deletedAt?: Date
-// }
-// User.init({
-//   id: {
-//     type: DataTypes.INTEGER.UNSIGNED,
-//     autoIncrement: true,
-//     primaryKey: true
-//   },
-//   username: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     unique: true
-//   },
-//   email: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     unique: true
-//   },
-//   pass: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   }
-// }, {
-//   // Other model options go here
-//   timestamps: true,
-//   sequelize: sequelizeConnection, // We need to pass the connection instance
-//   modelName: 'User', // We need to choose the model name
-//   paranoid: true
-// })
+  @BeforeCreate
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  static async crypt (instance: User) {
+    console.log('🚀 ~ file: user.ts:76 ~ User ~ crypt ~ instance:', instance)
+    const salt = await bcrypt.genSalt()
+    console.log('🚀 ~ file: user.ts:78 ~ User ~ crypt ~ salt:', salt)
+    instance.salt = salt
+    const passwordHash = await User.hashAuth(instance.pass, salt)
+    console.log('🚀 ~ file: user.ts:80 ~ User ~ crypt ~ passwordHash:', passwordHash)
+    instance.pass = passwordHash
+  }
+
+  static async hashAuth (password: string, salt: string): Promise<any> {
+    return await bcrypt.hash(password, salt)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  async validatePassword (password: string) {
+    const passwordHash = await User.hashAuth(password, this.salt)
+    // se compara con el que ya está
+    return passwordHash === this.pass
+  }
+}
 
 export default User

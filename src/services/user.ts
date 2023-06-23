@@ -1,4 +1,3 @@
-import { Op } from 'sequelize'
 import User, { createUser, loginUser, showUser } from '../models/user'
 
 export const signup = async (user: createUser): Promise<createUser> => {
@@ -9,13 +8,13 @@ export const signup = async (user: createUser): Promise<createUser> => {
 export const signin = async (user: loginUser): Promise<showUser | null> => {
   const result = await User.findOne({
     where: {
-      [Op.and]: [
-        { email: user.email },
-        { pass: user.pass }
-      ]
+      email: user.email
     },
-    attributes: ['id', 'username', 'email']
+    attributes: ['id', 'username', 'email', 'pass', 'salt']
   })
+  if (result == null) throw new Error('No se encontro el usuario')
+  const isEqual = await result.validatePassword(user.pass)
+  if (!isEqual) throw new Error('Error en la contraseña o usuario')
   if (result === null) throw new Error('Error, email o contraseña no encontrados')
   return result
 }
