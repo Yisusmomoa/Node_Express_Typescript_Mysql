@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { createTodo } from '../models/todo'
-import { newTodo, showTodoById, showTodosByUser } from '../services/todo'
+import { deleteTodo, newTodo, showTodoById, showTodosByUser } from '../services/todo'
 import authMe from '../middlewares/authMe'
 
 const router = express.Router()
@@ -52,8 +52,16 @@ router.put('/id', (_req: Request, res: Response) => {
   res.send('update todo')
 })
 
-router.delete('/id', (_req: Request, res: Response) => {
-  res.send('delete todo')
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.delete('/:id', async (req: any, res: Response) => {
+  try {
+    const id = Number(req.params.id)
+    const idUser: number = req.user.id
+    const result = await deleteTodo(id, idUser)
+    res.status(200).send({ result, message: 'Eliminada con exito' })
+  } catch (error) {
+    res.status(400).send({ message: error.message })
+  }
 })
 
 export default router

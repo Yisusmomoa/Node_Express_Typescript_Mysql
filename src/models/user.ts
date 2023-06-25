@@ -20,10 +20,6 @@ export type loginUser = Pick<user, 'email' | 'pass'>
 
 export type showUser = Omit<user, 'pass' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'salt'>
 
-// @Table
-// class User extends Model {
-//   @Column name!: string
-// }
 @Table({ tableName: 'User', underscored: true })
 class User extends Model<user | createUser | loginUser | showUser> {
   @Column({

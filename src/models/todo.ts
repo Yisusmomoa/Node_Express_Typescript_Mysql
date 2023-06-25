@@ -37,11 +37,6 @@ class Todo extends Model<todo | createTodo | showTodo> {
   })
     description!: string
 
-  // @Column({
-  //   type: DataType.INTEGER
-  // })
-  //   userCreate!: number
-
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: false
@@ -61,47 +56,5 @@ class Todo extends Model<todo | createTodo | showTodo> {
   @Column
     userCreate!: number
 }
-
-// class Todo extends Model<todo> implements todo {
-//   id!: number
-//   title!: string
-//   description!: string
-//   userCreate!: number
-//   completed!: boolean
-//   createdAt?: Date | undefined
-//   updatedAt?: Date | undefined
-//   deletedAt?: Date | undefined
-// }
-// Todo.init({
-//   id: {
-//     type: DataTypes.INTEGER.UNSIGNED,
-//     autoIncrement: true,
-//     primaryKey: true
-//   },
-//   title: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   description: {
-//     type: DataTypes.TEXT
-//   },
-//   completed: {
-//     type: DataTypes.BOOLEAN,
-//     defaultValue: false
-//   },
-//   userCreate: {
-//     type: DataTypes.INTEGER,
-//     references: {
-//       model: User,
-//       key: 'id'
-//     }
-//   }
-// }, {
-//   // Other model options go here
-//   timestamps: true,
-//   sequelize: sequelizeConnection, // We need to pass the connection instance
-//   modelName: 'User', // We need to choose the model name
-//   paranoid: true
-// })
 
 export default Todo

@@ -21,3 +21,14 @@ export const showTodoById = async (id: number, idUser: number): Promise<showTodo
   if (todo == null) throw new Error('No se encontro la todo seleccionada')
   return todo
 }
+
+export const deleteTodo = async (id: number, idUser: number): Promise<number> => {
+  const result = await Todo.destroy({
+    where: {
+      id,
+      userCreate: idUser
+    }
+  })
+  if (result !== 1) throw new Error('Erro al eliminar la todo, intentar más tarde')
+  return result
+}
