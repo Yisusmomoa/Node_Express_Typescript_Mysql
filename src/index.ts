@@ -25,5 +25,6 @@ sequelizeConnection.sync({ force: false }).then(() => {
 TODO
 logica de users: registro y login ✔
 Logica de todos: create, get all by user, get by id, delete, update
-jwt
+jwt y cookies ✔
+Redis https://codevoweb.com/node-typescript-mongodb-jwt-authentication/
 */

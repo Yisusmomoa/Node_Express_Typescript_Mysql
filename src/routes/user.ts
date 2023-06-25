@@ -41,9 +41,21 @@ router.post('/signin', async (req: Request, res: Response) => {
   }
 })
 
-router.get('/usuariologeado', authMe, (req, res) => {
-  const user = req.body.user
-  res.status(202).send(user)
+router.get('/me', authMe, (req: any, res: any) => {
+  try {
+    res.header('Access-Control-Allow-Origin', req.headers.origin)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.status(200).send({
+      success: true,
+      message: 'usuario encontrado',
+      result: req.user
+    })
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error
+    })
+  }
 })
 
 export default router

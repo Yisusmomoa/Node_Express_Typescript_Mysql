@@ -12,8 +12,11 @@ export interface todo {
   updatedAt?: Date
   deletedAt?: Date
 }
+export type createTodo = Omit<todo, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'completed'>
+export type showTodo = Omit<todo, 'updatedAt' | 'deletedAt'>
+
 @Table({ tableName: 'Todo', underscored: true })
-class Todo extends Model<todo> {
+class Todo extends Model<todo | createTodo | showTodo> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
