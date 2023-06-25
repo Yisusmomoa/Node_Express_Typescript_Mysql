@@ -18,13 +18,12 @@ sequelizeConnection.sync({ force: false }).then(() => {
   console.log('err: ', err)
 })
 
-// https://www.npmjs.com/package/sequelize-typescript
-
-// TODO
 /*
 TODO
 logica de users: registro y login ✔
-Logica de todos: create, get all by user, get by id, delete, update
+Logica de todos: create, get all by user, get by id, delete, update, marcar completada
 jwt y cookies ✔
-Redis https://codevoweb.com/node-typescript-mongodb-jwt-authentication/
+correción del middleware authMe, añadir una propiedad al request en typescript
+pruebas unitarias
+Redis https://codevoweb.com/node-typescript-mongodb-jwt-authentication/ para los token
 */

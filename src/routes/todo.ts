@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
-import { createTodo } from '../models/todo'
-import { deleteTodo, newTodo, showTodoById, showTodosByUser } from '../services/todo'
+import { createTodo, updateTodo } from '../models/todo'
+import { deleteTodo, newTodo, showTodoById, showTodosByUser, updateTodoMe } from '../services/todo'
 import authMe from '../middlewares/authMe'
 
 const router = express.Router()
@@ -48,17 +48,28 @@ router.post('/', async (req: any, res: Response) => {
   }
 })
 
-router.put('/id', (_req: Request, res: Response) => {
-  res.send('update todo')
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id)
+    const { title, descr } = req.body
+    const todo: updateTodo = {
+      title,
+      description: descr
+    }
+    const result = await updateTodoMe(id, todo)
+    res.status(200).send({ result, message: 'Eliminada con exito' })
+  } catch (error) {
+    res.status(400).send({ message: error.message })
+  }
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.delete('/:id', async (req: any, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
-    const idUser: number = req.user.id
-    const result = await deleteTodo(id, idUser)
-    res.status(200).send({ result, message: 'Eliminada con exito' })
+    const result = await deleteTodo(id)
+    res.status(200).send({ result, message: 'Editada con exito' })
   } catch (error) {
     res.status(400).send({ message: error.message })
   }
