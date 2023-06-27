@@ -22,16 +22,21 @@ export const showTodoById = async (id: number, idUser: number): Promise<showTodo
   return todo
 }
 
-export const deleteTodo = async (id: number): Promise<number> => {
+export const deleteTodo = async (id: number, idUser: number): Promise<number> => {
   const result = await Todo.destroy({
-    where: { id }
+    where: { id, userCreate: idUser }
   })
   if (result !== 1) throw new Error('Erro al eliminar la todo, intentar más tarde')
   return result
 }
 
-export const updateTodoMe = async (id: number, todoInfo: updateTodo): Promise<showTodo> => {
-  const todo = await Todo.findByPk(id)
+export const updateTodoMe = async (id: number, todoInfo: updateTodo, idUser: number): Promise<showTodo> => {
+  const todo = await Todo.findOne({
+    where: {
+      id,
+      userCreate: idUser
+    }
+  })
   if (todo === undefined || todo === null) throw new Error('Error, todo no encontrada')
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   todoInfo.title.length > 0
@@ -45,8 +50,13 @@ export const updateTodoMe = async (id: number, todoInfo: updateTodo): Promise<sh
   return todo
 }
 
-export const completedTodo = async (id: number): Promise<showTodo> => {
-  const result = await Todo.findByPk(id)
+export const completedTodo = async (id: number, idUser: number): Promise<showTodo> => {
+  const result = await Todo.findOne({
+    where: {
+      id,
+      userCreate: idUser
+    }
+  })
   if (result === undefined || result === null) throw new Error('Error, todo no encontrada')
   result.completed = !result.completed
   await result.save()

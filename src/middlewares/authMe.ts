@@ -1,8 +1,9 @@
-// import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { verifyToken } from '../config/token'
+import { CustomRequest } from '../CustomRequest '
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const authMe = (req: any, res: any, next: any) => {
+const authMe = (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     res.header('Access-Control-Allow-Origin', req.headers.origin)
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
