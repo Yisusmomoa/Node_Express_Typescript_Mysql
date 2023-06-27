@@ -58,4 +58,21 @@ router.get('/me', authMe, (req: any, res: any) => {
   }
 })
 
+router.post('/logout', authMe, (_req: Request, res: Response) => {
+  try {
+    res.clearCookie('token', {
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1800000,
+      httpOnly: true
+    })
+    res.status(200).send({ mesage: 'Logout exitoso' })
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error
+    })
+  }
+})
+
 export default router
