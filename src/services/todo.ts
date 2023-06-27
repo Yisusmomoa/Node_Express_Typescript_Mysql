@@ -44,3 +44,11 @@ export const updateTodoMe = async (id: number, todoInfo: updateTodo): Promise<sh
   await todo.save()
   return todo
 }
+
+export const completedTodo = async (id: number): Promise<showTodo> => {
+  const result = await Todo.findByPk(id)
+  if (result === undefined || result === null) throw new Error('Error, todo no encontrada')
+  result.completed = !result.completed
+  await result.save()
+  return result
+}

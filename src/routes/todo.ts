@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { createTodo, updateTodo } from '../models/todo'
-import { deleteTodo, newTodo, showTodoById, showTodosByUser, updateTodoMe } from '../services/todo'
+import { completedTodo, deleteTodo, newTodo, showTodoById, showTodosByUser, updateTodoMe } from '../services/todo'
 import authMe from '../middlewares/authMe'
 
 const router = express.Router()
@@ -59,6 +59,17 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
     const result = await updateTodoMe(id, todo)
     res.status(200).send({ result, message: 'Eliminada con exito' })
+  } catch (error) {
+    res.status(400).send({ message: error.message })
+  }
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+router.patch('/:id', async (req: any, res: any) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await completedTodo(id)
+    res.status(200).send({ result })
   } catch (error) {
     res.status(400).send({ message: error.message })
   }

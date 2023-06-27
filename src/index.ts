@@ -21,7 +21,7 @@ sequelizeConnection.sync({ force: false }).then(() => {
 /*
 TODO
 logica de users: registro y login ✔
-Logica de todos: create, get all by user, get by id, delete, update, marcar completada
+Logica de todos: create, get all by user, get by id, delete, update, marcar completada ✔
 jwt y cookies ✔
 correción del middleware authMe, añadir una propiedad al request en typescript
 pruebas unitarias
