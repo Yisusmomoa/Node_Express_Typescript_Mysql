@@ -18,6 +18,8 @@ sequelizeConnection.sync({ force: false }).then(() => {
   console.log('err: ', err)
 })
 
+export default app
+
 /*
 TODO
 logica de users: registro y login ✔

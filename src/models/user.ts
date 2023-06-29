@@ -14,7 +14,7 @@ export interface user {
   deletedAt?: Date
 }
 
-export type createUser = Omit<user, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+export type createUser = Omit<user, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'salt'>
 
 export type loginUser = Pick<user, 'email' | 'pass'>
 
@@ -69,12 +69,9 @@ class User extends Model<user | createUser | loginUser | showUser> {
   @BeforeCreate
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static async crypt (instance: User) {
-    console.log('🚀 ~ file: user.ts:76 ~ User ~ crypt ~ instance:', instance)
     const salt = await bcrypt.genSalt()
-    console.log('🚀 ~ file: user.ts:78 ~ User ~ crypt ~ salt:', salt)
     instance.salt = salt
     const passwordHash = await User.hashAuth(instance.pass, salt)
-    console.log('🚀 ~ file: user.ts:80 ~ User ~ crypt ~ passwordHash:', passwordHash)
     instance.pass = passwordHash
   }
 
