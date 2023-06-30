@@ -2,17 +2,20 @@ import express from 'express'
 import sequelizeConnection from './db/sequelize'
 import routes from './routes'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 const app = express()
 const PORT = 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 app.use(cookieParser())
+
 app.use('/api', routes)
+
 sequelizeConnection.sync({ force: false }).then(() => {
-  console.log('conection')
   app.listen(PORT, () => {
-    console.log(`Server listening ${PORT}`)
+    console.log(`Connection and Server listening ${PORT}`)
   })
 }).catch((err) => {
   console.log('err: ', err)
@@ -26,6 +29,6 @@ jwt y cookies ✔
 correción del middleware authMe, añadir una propiedad al request en typescript ✔
 correción en los métodos put, patch y delete permite eliminar todos que no son de otros usuarios ✔
 Logout ✔
-pruebas unitarias
+pruebas unitarias ✔
 Redis https://codevoweb.com/node-typescript-mongodb-jwt-authentication/ para los token
 */
